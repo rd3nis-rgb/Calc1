@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#08172f">
+  <title>Calcul des valeurs X et Y</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Accueil">
+        <span class="brand-mark" aria-hidden="true">XY</span>
+        <span><strong>Calcul Caténaire</strong><small>Réglage des équipements</small></span>
+      </a>
+
+      <div class="menu-wrap">
+        <button id="btnMenu" class="btn btn-ghost" type="button" aria-label="Ouvrir le menu">☰ <span>Menu</span></button>
+        <div id="menuOptions" class="project-menu">
+          <p class="menu-title">Gestion du projet</p>
+          <button id="btnSaveProject" type="button">💾 Guardar Projecto</button>
+          <button id="btnLoadProject" type="button">📂 Abrir Projecto</button>
+          <div id="submenuLoad" class="submenu-load"></div>
+          <div class="menu-divider"></div>
+          <button id="btnNewProject" type="button">🆕 Novo Projecto</button>
+          <button id="btnDeleteProjects" class="menu-danger" type="button">🗑️ Apagar Todos os Projectos</button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-copy">
+          <span class="eyebrow">OUTIL DE CALCUL</span>
+          <h1>Valeurs X et Y</h1>
+          <p>Calculez instantanément les réglages en fonction de la température et préparez vos données de chantier.</p>
+        </div>
+        <div class="range-pill"><span>🌡️</span><div><small>Plage de réglage</small><strong>−10 à 60 °C</strong></div></div>
+      </section>
+
+      <div id="projectList" class="project-list"></div>
+
+      <section class="panel control-panel">
+        <div class="panel-heading">
+          <div><span class="section-number">01</span><div><h2>Conditions actuelles</h2><p>Renseignez la température mesurée sur le chantier.</p></div></div>
+          <span class="status"><i></i> Calcul automatique</span>
+        </div>
+        <div class="control-grid">
+          <label class="field-card" for="temp">
+            <span>Température actuelle</span>
+            <div class="input-wrap"><input id="temp" class="temp-input" type="number" min="-10" max="60" step="0.5" oninput="recalcular()" placeholder="25"><b>°C</b></div>
+            <small>Valeur comprise entre −10 °C et 60 °C</small>
+          </label>
+          <button id="btnExportPDF" class="btn btn-primary" type="button"><span>↗</span> Exporter en PDF</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-heading">
+          <div><span class="section-number">02</span><div><h2>Calcul des tirés</h2><p>Les valeurs X et Y se mettent à jour avec la température.</p></div></div>
+          <button id="btnAddTire" class="btn btn-secondary" type="button">＋ Ajouter un tiré</button>
+        </div>
+        <div class="table-wrap">
+          <table id="tbl">
+            <thead><tr><th>Tiré</th><th>Longueur du tiré</th><th>Moitié du tiré</th><th>Valeur X</th><th>Valeur Y</th></tr></thead>
+            <tbody>
+              <tr><td>183/11 au 184/13</td><td>1080</td><td>540</td><td class="X result-cell"></td><td class="Y result-cell"></td></tr>
+              <tr><td>182/09 au 183/19</td><td>1206</td><td>603</td><td class="X result-cell"></td><td class="Y result-cell"></td></tr>
+              <tr><td>181/05 au 182/17</td><td>1273</td><td>636</td><td class="X result-cell"></td><td class="Y result-cell"></td></tr>
+              <tr><td>180/07 au 181/13</td><td>1125</td><td>562</td><td class="X result-cell"></td><td class="Y result-cell"></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel paired-panel">
+        <div class="panel-heading support-heading">
+          <div><span class="section-number">03</span><div><h2>Liste des supports</h2><p>Importez un fichier Excel pour classer automatiquement les supports par distance.</p></div></div>
+          <div class="button-row">
+            <button id="btnUploadExcel" class="btn btn-primary" type="button">⇩ Importer Excel</button>
+            <input type="file" id="excelInput" accept=".xlsx" hidden>
+            <button id="btnClearPostes" class="btn btn-danger" type="button">⌫ Nettoyer</button>
+          </div>
+        </div>
+        <div class="excel-help"><span>i</span><p><strong>Format attendu :</strong> colonne A = numéro du support · colonne B = distance. Une ligne doit contenir la distance 0.</p></div>
+        <div class="table-wrap compact-table">
+          <table id="postes">
+            <thead><tr><th>0–150 m</th><th>150–300 m</th><th>300–450 m</th><th>450–600 m</th><th>600–700 m</th></tr></thead>
+            <tbody id="postes-body"><tr class="empty-row"><td colspan="5">Aucun fichier Excel importé</td></tr></tbody>
+          </table>
+        </div>
+
+        <div class="paired-divider"></div>
+
+        <div class="panel-heading paired-heading">
+          <div><span class="section-number">04</span><div><h2>Décalage de l'élément griffé</h2><p>Valeur en mm — une valeur négative indique un bras vers l'anticheminement.</p></div></div>
+        </div>
+        <div class="table-wrap compact-table">
+          <table id="bras">
+            <thead><tr><th>0–150 m</th><th>150–300 m</th><th>300–450 m</th><th>450–600 m</th><th>600–700 m</th></tr></thead>
+            <tbody id="bras-body"><tr class="empty-row"><td colspan="5">Saisissez une température pour afficher les valeurs</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <footer><span>Calcul Caténaire</span><small>Outil de préparation chantier</small></footer>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
