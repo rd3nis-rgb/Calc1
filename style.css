@@ -1,0 +1,174 @@
+
+/* Base styles */
+body { font-family: Arial, sans-serif; background:#f5f7fa; margin:20px; }
+.card { background:white; padding:16px; border-radius:12px; max-width:900px; margin:auto;
+        box-shadow:0 4px 12px rgba(0,0,0,0.15); }
+table { width:100%; border-collapse:collapse; margin-top:18px; }
+th, td { border:1px solid #888; padding:8px; text-align:center; }
+th { background:#e4e9f2; font-weight:bold; }
+.hidden { display:none; }
+.temp-input { padding:8px; border:2px solid #007bff; border-radius:6px; width:150px; font-size:16px; }
+h2 { margin-top:30px; }
+
+/* Buttons */
+.modern-btn, button {
+  padding: 14px 22px;
+  border-radius: 14px;
+  background: #4CAF50;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+  transition: 0.2s;
+}
+.modern-btn:hover, button:hover {
+  transform: translateY(-2px);
+  background:#43A047;
+}
+
+.button-row { margin:20px 0; display:flex; gap:12px; }
+
+/* Layout compacto das tabelas */
+.card {
+  max-width: 1100px;
+}
+
+#tbl,
+.compact-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+#tbl th,
+#tbl td {
+  padding: 6px 4px;
+  font-size: 13px;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+#tbl th:nth-child(1) { width: 28%; }
+#tbl th:nth-child(2) { width: 19%; }
+#tbl th:nth-child(3) { width: 25%; }
+#tbl th:nth-child(4),
+#tbl th:nth-child(5) { width: 14%; }
+
+.paired-tables {
+  margin-top: 24px;
+  padding: 16px;
+  border: 1px solid #d8dee8;
+  border-radius: 12px;
+  background: #f8fafc;
+}
+
+.paired-table-block + .paired-table-block {
+  margin-top: 14px;
+}
+
+.paired-table-block h2 {
+  margin: 10px 0 6px;
+  font-size: 18px;
+}
+
+.paired-table-block h2 small {
+  display: block;
+  margin-top: 3px;
+  color: #56616f;
+  font-size: 12px;
+  font-weight: normal;
+}
+
+.compact-table {
+  margin-top: 6px;
+}
+
+.compact-table th,
+.compact-table td {
+  width: 20%;
+  padding: 6px 3px;
+  font-size: 12px;
+  line-height: 1.15;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+/* MOBILE IMPROVEMENTS */
+@media (max-width: 700px){
+
+  body {
+    margin: 10px;
+    font-size: 17px;
+  }
+
+  .card {
+    padding: 12px;
+    border-radius: 10px;
+  }
+
+  h1 {
+    font-size: 22px;
+    text-align:center;
+  }
+
+  /* Buttons become full width */
+  button, .modern-btn {
+    width: 100%;
+    padding: 18px;
+    font-size: 18px;
+    justify-content:center;
+  }
+
+  .button-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* As tabelas ficam totalmente visíveis, sem scroll horizontal */
+  table {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    overflow: visible;
+    white-space: normal;
+  }
+
+  th, td {
+    padding: 4px 2px;
+    font-size: 10px;
+    line-height: 1.15;
+    overflow-wrap: anywhere;
+  }
+
+  #tbl th,
+  #tbl td {
+    padding: 4px 2px;
+    font-size: 10px;
+  }
+
+  .compact-table th,
+  .compact-table td {
+    padding: 4px 1px;
+    font-size: 9px;
+  }
+
+  .paired-tables {
+    margin-left: -4px;
+    margin-right: -4px;
+    padding: 8px 4px;
+  }
+
+  .paired-table-block h2 {
+    font-size: 15px;
+  }
+
+  .temp-input {
+    width: 100%;
+    font-size: 18px;
+    padding: 10px;
+  }
+}
